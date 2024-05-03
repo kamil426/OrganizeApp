@@ -1,0 +1,6 @@
+@OrganizeApp.WebApi_HostAddress = http://localhost:5108
+
+GET {{OrganizeApp.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,48 @@
+﻿.btn-modal {
+    width: 6.5rem;
+}
+
+.modal-icon-info {
+    content: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="50" height="50" viewBox="0 0 24 24"%3E%3Cpath fill="%2317a2b8" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8q0-.425-.288-.712T12 7q-.425 0-.712.288T11 8q0 .425.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22"%2F%3E%3C%2Fsvg%3E');
+    align-self: baseline;
+}
+
+.modal-icon-warning {
+    content: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="50" height="50" viewBox="0 0 32 32"%3E%3Cg fill="none"%3E%3Cpath fill="%23FFB02E" d="m14.839 5.668l-12.66 21.93c-.51.89.13 2.01 1.16 2.01h25.32c1.03 0 1.67-1.11 1.16-2.01l-12.66-21.93c-.52-.89-1.8-.89-2.32 0"%2F%3E%3Cpath fill="%23000" d="M14.599 21.498a1.4 1.4 0 1 0 2.8-.01v-9.16c0-.77-.62-1.4-1.4-1.4c-.77 0-1.4.62-1.4 1.4zm2.8 3.98a1.4 1.4 0 1 1-2.8 0a1.4 1.4 0 0 1 2.8 0"%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');
+    align-self: baseline;
+}
+
+.modal-icon-question {
+    content: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="50" height="50" viewBox="0 0 24 24"%3E%3Cpath fill="%2317a2b8" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-1-7v2h2v-2zm2-1.645A3.502 3.502 0 0 0 12 6.5a3.501 3.501 0 0 0-3.433 2.813l1.962.393A1.5 1.5 0 1 1 12 11.5a1 1 0 0 0-1 1V14h2z"%2F%3E%3C%2Fsvg%3E');
+    align-self: baseline;
+}
+
+.modal-icon-error {
+    content: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="50" height="50" viewBox="0 0 24 24"%3E%3Cpath fill="%23c82333" d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27zM17 15.74L15.74 17L12 13.26L8.26 17L7 15.74L10.74 12L7 8.26L8.26 7L12 10.74L15.74 7L17 8.26L13.26 12z"%2F%3E%3C%2Fsvg%3E');
+    align-self: baseline;
+}
+
+.modal-center {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.modal-body > .modal-text {
+    overflow-wrap: anywhere;
+}
+
+.overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 997;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.modal-display {
+    display: block;
+}

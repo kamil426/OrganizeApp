@@ -1,0 +1,9 @@
+﻿.btn-spinner {
+    display: flex;
+    column-gap: .6rem;
+    align-items: center;
+}
+
+.btn-spinner img {
+    width: 20px;
+}

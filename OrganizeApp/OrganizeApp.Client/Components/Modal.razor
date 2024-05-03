@@ -1,0 +1,63 @@
+﻿<div class="modal fade show @modalDisplayClass" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0" style="background-color: @HeaderColor">
+                <h5 class="modal-title" style="overflow-wrap:anywhere;">@Title</h5>
+                <button type="button" class="btn-close" style="display:@xCloseButtonDisplay" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="@((IconStyleId == IconStyle.None) ? "modal-body" : "modal-body modal-center")">
+                @switch (IconStyleId)
+                {
+                    case IconStyle.Info:
+                        <img class="me-2 modal-icon-info">
+                        break;
+                    case IconStyle.Question:
+                        <img class="me-2 modal-icon-question">
+                        break;
+                    case IconStyle.Warning:
+                        <img class="me-2 modal-icon-warning">
+                        break;
+                    case IconStyle.Error:
+                        <img class="me-2 modal-icon-error">
+                        break;
+                }
+                <div class="@((IconStyleId == IconStyle.None) ? "modal-text" : "modal-text col-9")">
+                 @Content
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 justify-content-center">
+                @switch (ButtonStyleId)    
+                {
+                    case ButtonStyle.Ok:
+                        <button type="button" class="btn btn-primary btn-modal" @onclick="Ok">@OkButtonText</button>
+                        break;
+                    case ButtonStyle.Cancel:
+                        <button type="button" class="btn btn-secondary btn-modal" @onclick="CloseModal">@CancelButtonText</button>
+                        break;
+                    case ButtonStyle.OkCancel:
+                        <button type="button" class="btn btn-primary btn-modal" @onclick="Ok">@OkButtonText</button>
+                        <button type="button" class="btn btn-secondary btn-modal" @onclick="CloseModal">@CancelButtonText</button>
+                        break;
+                    case ButtonStyle.YesNoCancel:
+                        <button type="button" class="btn btn-primary btn-modal" @onclick="Yes">@YesButtonText</button>
+                        <button type="button" class="btn btn-danger btn-modal" @onclick="No">@NoButtonText</button>
+                        <button type="button" class="btn btn-secondary btn-modal" @onclick="CloseModal">@CancelButtonText</button>
+                        break;
+                    case ButtonStyle.YesNo:
+                        <button type="button" class="btn btn-primary btn-modal" @onclick="Yes">@YesButtonText</button>
+                        <button type="button" class="btn btn-danger btn-modal" @onclick="No">@NoButtonText</button>
+                        break;
+                    default:
+                        <button type="button" class="btn btn-primary btn-modal" @onclick="Ok">@OkButtonText</button>
+                        <button type="button" class="btn btn-secondary btn-modal" @onclick="CloseModal">@CancelButtonText</button>
+                        break;
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
