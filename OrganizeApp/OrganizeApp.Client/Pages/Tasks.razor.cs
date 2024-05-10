@@ -1,27 +1,23 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using Microsoft.JSInterop.Implementation;
 using OrganizeApp.Client.Components;
 using OrganizeApp.Client.HttpRepository.Interfaces;
 using OrganizeApp.Shared.Task.Commands;
 using OrganizeApp.Shared.Task.Dtos;
-using System.Runtime.InteropServices;
 using TaskStatus = OrganizeApp.Shared.Common.Enums.TaskStatus;
 
 namespace OrganizeApp.Client.Pages
 {
-    public partial class Tasks //Todo: dodać animacje drag and drop-a
+    public partial class Tasks : IDisposable //Todo: kalendarz
     {
         private IList<TaskAllDto> _tasksList;
         private ChangeStatusTaskCommand _task;
-        private bool _isPrerendering = true;
-        private bool _isDeleteTrybeEnabled = false;
         private List<int> _deletingTasksId = new();
         private Modal Modal;
         private IJSObjectReference _jsModule;
-
-        public TaskAllDto DragModel { get; set; }
+        private bool _isLoading = true;
+        private bool _isDeleteTrybeEnabled = false;
+        private DotNetObjectReference<Client.Pages.Tasks>? _dotNetHelper;
 
         [Inject]
         public ITaskHttpRepository TaskHttpRepository { get; set; }
@@ -37,6 +33,8 @@ namespace OrganizeApp.Client.Pages
             if (firstRender)
             {
                 _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./scripts/JavaScript.js");
+                _dotNetHelper = DotNetObjectReference.Create(this);
+                await JSRuntime.InvokeVoidAsync("Helpers.setDotNetHelper", _dotNetHelper);
                 await RefreshTasks();
             }
             await base.OnAfterRenderAsync(firstRender);
@@ -45,41 +43,46 @@ namespace OrganizeApp.Client.Pages
         private async Task RefreshTasks()
         {
             _tasksList = await TaskHttpRepository.GetTasks();
-            _isPrerendering = false;
+            _isLoading = false;
             StateHasChanged();
+            await _jsModule.InvokeVoidAsync("CreateDroppable");
         }
 
-        private async Task OnDrop(TaskStatus status)
+        [JSInvokable("OnDrop")]
+        public async Task OnDrop(int taskId, int statusId)
         {
-            if (DragModel is null)
-                return;
-            DragModel.TaskStatus = status;
+            var dragModel = _tasksList.SingleOrDefault(x => x.Id == taskId);
+            var status = (TaskStatus)statusId;
 
-            if (DragModel.TaskStatus == TaskStatus.Complete)
-                DragModel.DateOfComplete = DateTime.Now;
-            else if (DragModel.DateOfComplete is not null)
-                DragModel.DateOfComplete = null;
+            if (dragModel is null)
+                return;
+
+            if (dragModel.TaskStatus == status)
+                return;
+
+            dragModel.TaskStatus = status;
+
+            if (dragModel.TaskStatus == TaskStatus.Complete)
+                dragModel.DateOfComplete = DateTime.Now;
+            else if (dragModel.DateOfComplete is not null)
+                dragModel.DateOfComplete = null;
 
             _task = new ChangeStatusTaskCommand()
             {
-                Id = DragModel.Id,
-                DateOfComplete = DragModel.DateOfComplete,
-                TaskStatus = DragModel.TaskStatus
+                Id = dragModel.Id,
+                DateOfComplete = dragModel.DateOfComplete,
+                TaskStatus = dragModel.TaskStatus
             };
 
             await TaskHttpRepository.ChangeStatus(_task);
             await RefreshTasks();
         }
 
-        private void OnDragStart(TaskAllDto task, DragEventArgs e)
+        private async void OnMouseEnter(int taskId)
         {
-            DragModel = task;
+            await _jsModule.InvokeVoidAsync("CreateDraggable", taskId);
         }
 
-        private void OnDragEnd(DragEventArgs e)
-        {
-            DragModel = null;
-        }
 
         private void AddTaskToListDeletingItems(int id, ChangeEventArgs e)
         {
@@ -108,12 +111,12 @@ namespace OrganizeApp.Client.Pages
 
         private async void DeleteTasks()
         {
-            if(_deletingTasksId.Count > 0)
+            if (_deletingTasksId.Count > 0)
                 foreach (var taskId in _deletingTasksId)
                 {
                     await TaskHttpRepository.DeleteTask(taskId);
                     var taskToDelete = _tasksList.SingleOrDefault(x => x.Id == taskId);
-                    if(taskToDelete is not null)
+                    if (taskToDelete is not null)
                         _tasksList.Remove(taskToDelete);
                 }
             Modal.Close();
@@ -141,6 +144,11 @@ namespace OrganizeApp.Client.Pages
         private void OpenDescription(int id)
         {
             NavigationManager.NavigateTo($"/task/read/{id}");
+        }
+
+        public void Dispose()
+        {
+            _dotNetHelper?.Dispose();
         }
     }
 }

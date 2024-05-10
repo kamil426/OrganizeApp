@@ -11,6 +11,21 @@
         "css/bootstrap.css.map",
         "js/bootstrap.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jqueryui@1.13.3",
+      "destination": "wwwroot/jqueryui/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/jquery/",
+      "files": [
+        "jquery.min.js",
+        "jquery.js",
+        "jquery.min.map"
+      ]
     }
   ]
 }
