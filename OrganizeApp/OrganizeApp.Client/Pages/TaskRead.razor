@@ -1,4 +1,4 @@
-﻿@page "/task/read/{id:int}"
+﻿@page "/task/read/{id:int}/{url}"
 @rendermode InteractiveAuto
 
 <PageTitle>Szczegóły zadania</PageTitle>
@@ -16,11 +16,14 @@ else
     <h3>Szczegóły zadania</h3>
 
     <div class="col-6">
-        <button class="btn btn-secondary mt-3" @onclick="ReturnToMyTasks"> Powrót</button>
+        <button class="btn btn-secondary mt-3" @onclick="Return"> Powrót</button>
 
         <div class="my-4 task-title"><b>Tytuł:</b> @_task.Title</div>
 
-        <div class="my-4 task-description"><b>Opis:</b> @_task.Description</div>
+        @if(_task.Description is not null)
+        {
+            <div class="my-4 task-description"><b>Opis:</b> @_task.Description</div>
+        }
 
         @if (_task.DateOfPlannedStart is not null)
         {
@@ -36,6 +39,8 @@ else
         {
             <div class="my-4"><b>Data zakończenia:</b> @_task.DateOfComplete</div>
         }
+
+        <div class="my-4"><b>Status zadania:</b> @_task.TaskStatus.AsString(EnumFormat.DisplayName)</div>
     </div>
 }
 

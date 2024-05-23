@@ -36,6 +36,7 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
                 DateOfPlannedStart = task.DateOfPlannedStart,
                 DateOfPlannedEnd = task.DateOfPlannedEnd,
                 DateOfComplete = task.DateOfComplete,
+                TaskStatus = task.TaskStatus,
             };
         }
     }

@@ -8,7 +8,7 @@ using TaskStatus = OrganizeApp.Shared.Common.Enums.TaskStatus;
 
 namespace OrganizeApp.Client.Pages
 {
-    public partial class Tasks : IDisposable //Todo: kalendarz
+    public partial class Tasks : IDisposable//ToDo: Dodać logowanie
     {
         private IList<TaskAllDto> _tasksList;
         private ChangeStatusTaskCommand _task;
@@ -17,7 +17,7 @@ namespace OrganizeApp.Client.Pages
         private IJSObjectReference _jsModule;
         private bool _isLoading = true;
         private bool _isDeleteTrybeEnabled = false;
-        private DotNetObjectReference<Client.Pages.Tasks>? _dotNetHelper;
+        private DotNetObjectReference<Tasks>? _dotNetHelper;
 
         [Inject]
         public ITaskHttpRepository TaskHttpRepository { get; set; }
@@ -120,6 +120,7 @@ namespace OrganizeApp.Client.Pages
                         _tasksList.Remove(taskToDelete);
                 }
             Modal.Close();
+            await _jsModule.InvokeVoidAsync("UncheckCheckboxes");
             _isDeleteTrybeEnabled = false;
             StateHasChanged();
         }
@@ -132,6 +133,7 @@ namespace OrganizeApp.Client.Pages
         private async void CancelDeleteTrybe()
         {
             await _jsModule.InvokeVoidAsync("UncheckCheckboxes");
+            _deletingTasksId.Clear();
             _isDeleteTrybeEnabled = false;
             StateHasChanged();
         }
@@ -143,7 +145,7 @@ namespace OrganizeApp.Client.Pages
 
         private void OpenDescription(int id)
         {
-            NavigationManager.NavigateTo($"/task/read/{id}");
+            NavigationManager.NavigateTo($"/task/read/{id}/tasks");
         }
 
         public void Dispose()

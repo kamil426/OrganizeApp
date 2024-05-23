@@ -13,6 +13,9 @@ namespace OrganizeApp.Client.Pages
         [Parameter]
         public int Id { get; set; }
 
+        [Parameter]
+        public string Url { get; set; }
+
         [Inject]
         public ITaskHttpRepository TaskHttpRepository { get; set; }
 
@@ -30,9 +33,9 @@ namespace OrganizeApp.Client.Pages
             await base.OnAfterRenderAsync(firstRender);
         }
 
-        private void ReturnToMyTasks()
+        private void Return()
         {
-            NavigationManager.NavigateTo("/tasks");
+            NavigationManager.NavigateTo($"/{Url.Replace("*", "/")}");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrganizeApp.Shared.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,6 @@ namespace OrganizeApp.Shared.Task.Dtos
         public DateTime? DateOfPlannedStart { get; set; }
         public DateTime? DateOfPlannedEnd { get; set; }
         public DateTime? DateOfComplete { get; set; }
-        public TaskStatus TaskStatus { get; set; }
+        public Common.Enums.TaskStatus TaskStatus { get; set; }
     }
 }

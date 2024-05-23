@@ -64,8 +64,30 @@ export function CreateDraggable(taskId) {
     }
 
     $(task).draggable({
+        start: function (event, ui) {
+            $(task).css("z-index", "1");
+        },
+        stop: function (event, ui) {
+            $(task).css("z-index", "0");
+        },
         cancel: ".nimbus--edit,.task-link,.task-checkbox",
         revert: true,
         containment: "document",
     });
+}
+
+export function SetSchedulerHeight(view) {
+
+    var scheduler = document.getElementById("scheduler");
+
+    switch (view) {
+
+        case "Miesiąc":
+            scheduler.style.height = "48.1em";
+            break;
+        case "Tydzień":
+        case "Dzień":
+            scheduler.style.height = "77.8em";
+            break;
+    }
 }
