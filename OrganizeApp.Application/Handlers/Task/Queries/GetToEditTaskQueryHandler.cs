@@ -22,7 +22,7 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
 
         public async Task<EditTaskCommand> Handle(GetToEditTaskQuery request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var task = await _context.Tasks.SingleAsync(x => x.Id == request.Id && x.UserId == request.UserId);
 
             if (task == null)
                 return null;

@@ -23,14 +23,13 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
 
         public async Task<TaskMoreInfoDto> Handle(GetMoreInfoTaskQuery request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var task = await _context.Tasks.SingleAsync(x => x.Id == request.Id && x.UserId == request.UserId);
 
             if (task == null)
                 return null;
 
             return new TaskMoreInfoDto
             {
-                Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
                 DateOfPlannedStart = task.DateOfPlannedStart,

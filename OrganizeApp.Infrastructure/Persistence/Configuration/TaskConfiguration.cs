@@ -23,6 +23,11 @@ namespace OrganizeApp.Infrastructure.Persistence.Configuration
 
             builder.Property(x => x.Description)
                 .HasMaxLength(1250);
+
+            builder.HasOne(x => x.ApplicationUser)
+                .WithMany(x => x.Tasks)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired();
         }
     }
 }

@@ -1,0 +1,67 @@
+﻿@page "/register"
+
+@rendermode InteractiveAuto
+@layout AuthenticationMainLayout
+
+<PageTitle>Stwórz nowe konto</PageTitle>
+
+@if (_isLoading)
+{
+    <Loading/>
+}
+else
+{
+    <section class="register-form">
+        <h2 class="register-form__heading">Stwórz nowe konto</h2>
+
+        @if (_showErrors)
+        {
+            <div class="alert alert-danger mx-4" role="alert">
+                @foreach (var error in _errors)
+                {
+                    <div>@error</div>
+                }
+            </div>
+        }
+
+        <EditForm Model="_command" OnValidSubmit="Save" FormName="Save">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="register-form__group">
+                <label class="register-form__label">Wprowadź adres e-mail:</label>
+                <InputText class="register-form__text"
+                           @bind-Value="_command.Email"
+                           type="email"
+                           placeholder="Wprowadź adres e-mail" />
+
+            </div>
+
+            <div class="register-form__group">
+                <label class="register-form__label">Wprowadź hasło:</label>
+                <InputText @bind-Value="_command.Password"
+                           class="register-form__text"
+                           type="password"
+                           placeholder="Wprowadź hasło" />
+            </div>
+
+            <div class="register-form__group">
+                <label class="register-form__label">Potwierdź hasło:</label>
+                <InputText @bind-Value="_command.ConfirmPassword"
+                           class="register-form__text"
+                           type="password"
+                           placeholder="Potwierdź hasło" />
+            </div>
+
+            <button class="register-form__button btn btn-primary">
+                Rejestruj
+            </button>
+
+            <div class="register-form__link">
+                <a href="/login" class="register-form__a">Mam już swoje konto</a>
+
+            </div>
+        </EditForm>
+
+
+    </section>
+}

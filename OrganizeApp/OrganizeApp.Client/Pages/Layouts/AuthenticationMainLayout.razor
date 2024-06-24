@@ -1,0 +1,28 @@
+﻿@inherits LayoutComponentBase
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <div class="p-4 fw-bold rz-text-align-center">
+                <RadzenLink Path="/" Text="Strona główna" />
+            </div>
+            <div class="p-4 rz-text-align-center">
+                <RadzenLink Path="/tasks" Text="Moje zadania" />
+            </div>
+            <div class="p-4 rz-text-align-center">
+                <RadzenLink Path="/privacy" Text="Polityka prywatności" />
+            </div>
+            <div class="p-4 rz-text-align-center">
+                <RadzenLink Path="/contact" Text="Kontakt" />
+            </div>
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+    <RadzenFooter>
+        Copyright © 2023 OrganizeApp
+    </RadzenFooter>
+</RadzenLayout>

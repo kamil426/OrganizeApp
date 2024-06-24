@@ -1,0 +1,19 @@
+﻿.main-section {
+    padding: 3rem 1rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+}
+
+.main-section-header {
+    margin: 0 0 1rem 2rem;
+}
+
+.main-section-text {
+    margin: 0 0 1rem 2rem;
+}
+
+@media screen and (min-width: 1200px) {
+    .main-section {
+        margin: 1rem 7rem 1rem 7rem;
+        padding: 3rem;
+    }
+}

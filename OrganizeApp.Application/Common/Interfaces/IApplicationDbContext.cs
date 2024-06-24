@@ -10,6 +10,7 @@ namespace OrganizeApp.Application.Common.Interfaces
 {
     public interface IApplicationDbContext : IDisposable
     {
+        DbSet<ApplicationUser> Users { get; }
         DbSet<Domain.Entities.Task> Tasks { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

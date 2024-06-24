@@ -24,5 +24,6 @@ namespace OrganizeApp.Shared.Task.Commands
 
         [DateGreaterThan("DateOfPlannedStart", ErrorMessage = "Data zakończenia musi być większa od daty rozpoczęcia")]
         public DateTime? DateOfPlannedEnd { get; set; }
+        public string UserId { get; set; }
     }
 }

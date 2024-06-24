@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OrganizeApp.Application.Common.Interfaces;
 using OrganizeApp.Shared.Task.Commands;
 using System;
@@ -20,7 +21,9 @@ namespace OrganizeApp.Application.Handlers.Task.Commands
 
         public async System.Threading.Tasks.Task Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
         {
-            _context.Tasks.Remove(new Domain.Entities.Task() { Id = request.Id });
+            var taskToDelete = await _context.Tasks.SingleAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+
+            _context.Tasks.Remove(taskToDelete);
 
             await _context.SaveChangesAsync(cancellationToken);
         }

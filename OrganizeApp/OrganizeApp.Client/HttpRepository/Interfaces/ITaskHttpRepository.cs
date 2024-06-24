@@ -7,11 +7,11 @@ namespace OrganizeApp.Client.HttpRepository.Interfaces
     public interface ITaskHttpRepository
     {
         Task Add(AddTaskCommand command);
-        Task<IList<TaskAllDto>> GetTasks();
+        Task<IList<TaskAllDto>> GetTasks(string userId);
         Task ChangeStatus(ChangeStatusTaskCommand command);
-        Task<EditTaskCommand> GetEditTask(int id);
+        Task<EditTaskCommand> GetEditTask(int id, string userId);
         Task Edit(EditTaskCommand command);
-        Task<TaskMoreInfoDto> GetMoreInfo(int id);
-        Task DeleteTask(int id);
+        Task<TaskMoreInfoDto> GetMoreInfo(int id, string userId);
+        Task DeleteTask(int id, string userId);
     }
 }

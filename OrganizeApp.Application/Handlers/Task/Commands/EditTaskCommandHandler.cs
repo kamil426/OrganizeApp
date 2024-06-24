@@ -21,7 +21,7 @@ namespace OrganizeApp.Application.Handlers.Task.Commands
 
         public async System.Threading.Tasks.Task Handle(EditTaskCommand request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var task = await _context.Tasks.SingleAsync(x => x.Id == request.Id && x.UserId == request.UserId);
 
             if (task == null)
                 throw new Exception("Not Found");

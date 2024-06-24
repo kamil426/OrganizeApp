@@ -24,6 +24,7 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
         {
             var tasks = await _context
                 .Tasks
+                .Where(x => x.UserId ==  request.UserId)
                 .AsNoTracking()
                 .OrderBy(x => x.DateOfComplete)
                 .Select(x => new TaskAllDto

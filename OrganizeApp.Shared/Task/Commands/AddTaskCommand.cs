@@ -19,5 +19,6 @@ namespace OrganizeApp.Shared.Task.Commands
 
         [Range(1, 2, ErrorMessage = "Pole 'Status zadania' jest wymagane")]
         public Common.Enums.TaskStatus TaskStatus { get; set; }
+        public string UserId { get; set; }
     }
 }

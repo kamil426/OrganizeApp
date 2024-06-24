@@ -91,3 +91,36 @@ export function SetSchedulerHeight(view) {
             break;
     }
 }
+
+export function SetLoginHeader(userName, href) {
+
+    var spinner = document.getElementsByClassName("spinner-header")[0].children[0];
+    var spinnerText = document.getElementsByClassName("spinner-header")[0].children[1];
+
+    spinner.style.display = "none";
+
+    if (href != null) {
+
+        var aList = document.getElementsByTagName("a");
+        for (var i = 0; i < aList.length; i++) {
+            if (aList[i].href == href) {
+                aList[i].removeAttribute("href");
+            }
+        }
+    }
+
+    if (userName == null) {
+        spinnerText.textContent = "Jesteś niezalogowany!";
+        return;
+    }
+
+    spinnerText.style.display = "inline";
+    spinnerText.textContent = "Witaj " + userName;
+
+    var loginLinkDiv = document.getElementsByClassName("login-link")[0];
+    loginLinkDiv.style.display = "block";
+    var loginLinkA = loginLinkDiv.children[0];
+
+    loginLinkA.setAttribute("href", "/logout");
+    loginLinkA.children[0].textContent = "Wyloguj się";
+}

@@ -1,0 +1,44 @@
+﻿@page "/task/scheduler/{data?}/{view?}"
+@rendermode _renderMode
+
+<PageTitle>Kalendarz</PageTitle>
+
+<h2>Kalendarz</h2>
+
+<Auth>
+    <ChildContent Context="AuthContext">
+        @if (_isLoading)
+        {
+            <Loading />
+        }
+        else
+        {
+            <RadzenScheduler id="scheduler"
+                             class="my-4"
+                             style="height: 48.1em;"
+                             @ref=_scheduler
+                             TItem="TaskAllDto"
+                             Data=@_tasks
+                             StartProperty="DateOfPlannedStart"
+                             EndProperty="DateOfPlannedEnd"
+                             TextProperty="Title"
+                             SelectedIndex="@_selectedIndex"
+                             TodayText="Dzisiaj"
+                             NextText="Następny"
+                             PrevText="Poprzedni"
+                             Date="@_date"
+                             SlotRender=@OnSlotRender
+                             AppointmentSelect="@OpenDescription"
+                             AppointmentRender="@OnAppointmentRender"
+                             @onclick="OnClick">
+
+                <RadzenDayView Text="Dzień" TimeFormat="H tt" StartTime="TimeSpan.FromHours(0)" />
+                <RadzenWeekView Text="Tydzień" HeaderFormat="ddd dd.MM" TimeFormat="H tt" StartTime="TimeSpan.FromHours(0)" />
+                <RadzenMonthView Text="Miesiąc" MoreText="+ {0} Więcej" />
+
+            </RadzenScheduler>
+
+            <RadzenDialog />
+        }
+    </ChildContent>
+</Auth>

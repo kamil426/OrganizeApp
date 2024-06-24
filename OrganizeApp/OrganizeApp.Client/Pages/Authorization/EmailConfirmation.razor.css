@@ -1,0 +1,19 @@
+﻿.confirm-email {
+    padding: 3rem 1rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+}
+
+.confirm-email__p {
+    margin: 2rem 0 2rem 2rem;
+}
+
+.confirm-email__heading {
+    margin: 0 0 1rem 2rem;
+}
+
+@media screen and (min-width: 1200px) {
+    .confirm-email {
+        margin: 1rem 7rem 1rem 7rem;
+        padding: 3rem;
+    }
+}

@@ -1,0 +1,13 @@
+﻿<AuthorizeView>
+    <Authorized Context="AuthContext">
+        @ChildContent(AuthContext)
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin></RedirectToLogin>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public RenderFragment<AuthenticationState> ChildContent { get; set; }
+}
