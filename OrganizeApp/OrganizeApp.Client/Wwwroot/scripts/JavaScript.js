@@ -40,7 +40,7 @@ export function CreateDroppable() {
             ui.draggable.removeAttr("style");
             ui.draggable.draggable("destroy");
             ui.draggable.css("visibility", "hidden");
-            
+
             Helpers.OnDrop(taskId, statusId).then(function () {
 
                 var tasks = document.getElementsByClassName("draggable-task");
@@ -123,4 +123,11 @@ export function SetLoginHeader(userName, href) {
 
     loginLinkA.setAttribute("href", "/logout");
     loginLinkA.children[0].textContent = "Wyloguj się";
+}
+
+export function Print() {
+
+    document.getElementsByClassName("button-hide")[0].style.display = "none";
+    window.print();
+    document.getElementsByClassName("button-hide")[0].style.display = "block";
 }

@@ -41,6 +41,13 @@ namespace OrganizeApp.WebApi.Controllers
             return Ok(task);
         }
 
+        [HttpGet("check-list/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetTasksCheckList(string userId)
+        {
+            return Ok(await Mediator.Send(new GetTasksCheckListQuery { UserId = userId }));
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Add(AddTaskCommand command)

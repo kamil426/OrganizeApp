@@ -13,7 +13,7 @@ using OrganizeApp.Client.Services;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class AddTask : IDisposable
+    public partial class AddTask : IDisposable //ToDo: addTask event onblur
     {
         private AddTaskCommand _task = new AddTaskCommand();
 

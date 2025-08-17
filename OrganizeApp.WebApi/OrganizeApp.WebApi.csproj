@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\OrganizeApp\OrganizeApp.Client\Pages\Authorization\RedirectToLogin.razor" Link="RedirectToLogin.razor" />
     <None Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

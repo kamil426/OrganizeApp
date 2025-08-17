@@ -120,3 +120,8 @@
 .disabled-link {
     pointer-events: none;
 }
+
+.checklist-option {
+    list-style-type: none;
+    padding: 0;
+}

@@ -32,5 +32,8 @@ namespace OrganizeApp.Client.HttpRepository
 
         public async Task<IList<TaskAllDto>> GetTasks(string userId)
             => await _client.GetFromJsonAsync<IList<TaskAllDto>>($"task/{userId}");
+
+        public async Task<IList<TasksCheckListDto>> GetTasksCheckList(string userId)
+            => await _client.GetFromJsonAsync<IList<TasksCheckListDto>>($"task/check-list/{userId}");
     }
 }

@@ -1,0 +1,80 @@
+﻿@using TaskStatus = OrganizeApp.Shared.Common.Enums.TaskStatus;
+
+@page "/tasks/checklist"
+@rendermode _renderMode
+@layout NoLayout
+
+<PageTitle>Generowanie checklisty</PageTitle>
+
+<Auth>
+    <ChildContent Context="AuthContext">
+        @if (_isLoading)
+        {
+            <Loading />
+        }
+        else if (_tasksList is null)
+        {
+            <h5 class="my-5 text-center fw-bold">Brak danych!</h5>
+        }
+        else
+        {
+            <div class="mb-4 button-hide">
+                <button class="btn btn-primary" @onclick="Print">
+                    <span class="streamline-ultimate--print-text me-1 align-text-top" />
+                    <span>Drukuj</span>
+                </button>
+                <button class="btn btn-secondary" @onclick="Return"> Powrót</button>
+            </div>
+
+            <section class="check-list">
+                <h1 class="text-start fw-bold">Lista zadań</h1>
+
+                @if (IsToDoChecked)
+                {
+                    <section class="my-4">
+                        <h4 class="text-start fw-bold mt-2">Do zrobienia:</h4>
+                        @for (int i = 1; i <= _tasksListToDo.Count; i++)
+                        {
+
+                            <div class="grid-1x3 my-2">
+                                <input type="checkbox" class="form-check text-center checkbox" />
+                                <span class="align-top fw-bold text-center">@i.</span>
+                                <span>@_tasksListToDo[i - 1].Title</span>
+                            </div>
+                        }
+                    </section>
+                }
+
+                @if (IsInProgressChecked)
+                {
+                    <section class="my-4">
+                        <h4 class="text-start fw-bold">W trakcie:</h4>
+                        @for (int i = 1; i <= _tasksListInProgress.Count; i++)
+                        {
+                            <div class="grid-1x3 my-2">
+                                <input type="checkbox" class="form-check text-center checkbox" />
+                                <span class="align-top fw-bold text-center">@i.</span>
+                                <span>@_tasksListInProgress[i - 1].Title</span>
+                            </div>
+                        }
+                    </section>
+                }
+
+                @if (IsCompleteChecked)
+                {
+                    <section class="my-4">
+                        <h4 class="text-start fw-bold">Zakończone:</h4>
+                        @for (int i = 1; i <= _tasksListComplete.Count; i++)
+                        {
+                            <div class="grid-1x3 my-2">
+                                <input type="checkbox" checked="checked" class="form-check text-center checkbox" />
+                                <span class="align-top fw-bold text-center">@i.</span>
+                                <span>@_tasksListComplete[i - 1].Title</span>
+                            </div>
+                        }
+                    </section>
+                }
+            </section>
+        }
+    </ChildContent>
+</Auth>

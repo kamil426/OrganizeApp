@@ -13,5 +13,6 @@ namespace OrganizeApp.Client.HttpRepository.Interfaces
         Task Edit(EditTaskCommand command);
         Task<TaskMoreInfoDto> GetMoreInfo(int id, string userId);
         Task DeleteTask(int id, string userId);
+        Task<IList<TasksCheckListDto>> GetTasksCheckList(string userId);
     }
 }

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\OrganizeApp.Client\Pages\Authorization\RedirectToLogin.razor" Link="RedirectToLogin.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\OrganizeApp.Client\OrganizeApp.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
     <PackageReference Include="Radzen.Blazor" Version="4.32.3" />

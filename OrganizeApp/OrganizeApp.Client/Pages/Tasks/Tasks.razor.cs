@@ -7,23 +7,28 @@ using OrganizeApp.Client.Extensions;
 using OrganizeApp.Client.HttpInterceptor;
 using OrganizeApp.Client.HttpRepository.Interfaces;
 using OrganizeApp.Client.Services;
+using OrganizeApp.Shared.Common.Models;
 using OrganizeApp.Shared.Task.Commands;
 using OrganizeApp.Shared.Task.Dtos;
+using System.Security.Claims;
 using TaskStatus = OrganizeApp.Shared.Common.Enums.TaskStatus;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class Tasks : IDisposable//ToDo: polityka prywatności i kontakt
+    public partial class Tasks : IDisposable //ToDo: zaszyfrowanie hasła do emaila, kategorie, zmniejszenie rozmiarów tasków, sortowanie tasków
     {
         private IList<TaskAllDto> _tasksList;
         private ChangeStatusTaskCommand _task;
         private List<int> _deletingTasksId = new();
-        private Modal Modal;
+        private Modal _modalDeleteTasks;
+        private Modal _modalCheckListConfiguration;
         private IJSObjectReference _jsModule;
         private bool _isLoading = true;
         private bool _isDeleteTrybeEnabled = false;
         private DotNetObjectReference<Tasks>? _dotNetHelper;
-        private static IComponentRenderMode _renderMode = new InteractiveAutoRenderMode(prerender:false);
+        private static IComponentRenderMode _renderMode = new InteractiveAutoRenderMode(prerender: false);
+        private IEnumerable<CheckListConfiguration> _checkListConfiguration;
+        private bool _isCheckListConfigValid = true;
 
         [Inject]
         public ITaskHttpRepository TaskHttpRepository { get; set; }
@@ -47,6 +52,12 @@ namespace OrganizeApp.Client.Pages.Tasks
         {
             Interceptor.RegisterBeforeSendAsyncEvent();
             Interceptor.RegisterAfterSendAsyncEvent();
+            _checkListConfiguration = new List<CheckListConfiguration>
+            {
+                new() {StatusName = TaskStatus.ToDo.ToString(), IsChecked = false },
+                new() {StatusName = TaskStatus.InProgress.ToString(), IsChecked = false },
+                new() {StatusName = TaskStatus.Complete.ToString(), IsChecked = false },
+            };
             await base.OnInitializedAsync();
         }
 
@@ -66,6 +77,8 @@ namespace OrganizeApp.Client.Pages.Tasks
         private async Task RefreshTasks()
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated is false)
+                NavigationManager.NavigateTo("/login");
             _tasksList = await TaskHttpRepository.GetTasks(authState.GetUserId());
             _isLoading = false;
             StateHasChanged();
@@ -130,7 +143,7 @@ namespace OrganizeApp.Client.Pages.Tasks
         {
             if (_isDeleteTrybeEnabled && _deletingTasksId.Count > 0)
             {
-                Modal.Open();
+                _modalDeleteTasks.Open();
                 return;
             }
             _isDeleteTrybeEnabled = true;
@@ -146,7 +159,7 @@ namespace OrganizeApp.Client.Pages.Tasks
                     if (taskToDelete is not null)
                         _tasksList.Remove(taskToDelete);
                 }
-            Modal.Close();
+            _modalDeleteTasks.Close();
             await _jsModule.InvokeVoidAsync("UncheckCheckboxes");
             _isDeleteTrybeEnabled = false;
             StateHasChanged();
@@ -154,7 +167,12 @@ namespace OrganizeApp.Client.Pages.Tasks
 
         private void CancelDelete()
         {
-            Modal.Close();
+            _modalDeleteTasks.Close();
+        }
+
+        private void GenerateCheckList()
+        {
+            _modalCheckListConfiguration.Open();
         }
 
         private async void CancelDeleteTrybe()
@@ -179,6 +197,26 @@ namespace OrganizeApp.Client.Pages.Tasks
         {
             Interceptor.DisposeEvent();
             _dotNetHelper?.Dispose();
+        }
+
+        private void ConfigCheckList()
+        {
+            if(_checkListConfiguration.FirstOrDefault(x => x.IsChecked == true) == null)
+            {
+                _isCheckListConfigValid = false;
+                return;
+            }
+            NavigationManager.NavigateTo($"/tasks/checklist?" +
+                $"ToDo={_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.ToDo) - 1).IsChecked}&" +
+                $"InProgress={_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.InProgress) - 1).IsChecked}&" +
+                $"Complete={_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.Complete) - 1).IsChecked}");
+        }
+
+        private void ConfigCheckListChanged(TaskStatus status, ChangeEventArgs e)
+        {
+            if(!_isCheckListConfigValid && Convert.ToBoolean(e.Value) == true)
+                _isCheckListConfigValid = true;
+            _checkListConfiguration.ElementAt(Convert.ToInt32(status) - 1).IsChecked = Convert.ToBoolean(e.Value);
         }
     }
 }

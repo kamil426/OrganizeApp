@@ -20,7 +20,7 @@
         {
             <h2>Moje zadania</h2>
 
-            <Modal @ref="Modal" Title="Usuwanie zadań"
+            <Modal @ref="_modalDeleteTasks" Title="Usuwanie zadań"
                    IconStyleId="Modal.IconStyle.Warning"
                    HeaderColor="#4340D2"
                    ButtonStyleId="Modal.ButtonStyle.YesNo"
@@ -32,7 +32,40 @@
                 </Content>
             </Modal>
 
+            <Modal @ref="_modalCheckListConfiguration" Title="Konfiguracja check listy"
+                   IconStyleId="Modal.IconStyle.None"
+                   HeaderColor="#4340D2"
+                   ButtonStyleId="Modal.ButtonStyle.OkCancel"
+                   OnClickButtonOk="ConfigCheckList"
+                   IsXCloseButtonVisible="false">
+                <Content>
+                    <h5>Wybierz kategorię zadań, które chcesz aby się znalazły na liście</h5>
+                    <ul class="checklist-option mt-4">
+                        <li class="m-2">
+                            <input type="checkbox" checked="@_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.ToDo) - 1).IsChecked" class="form-check-input" @onchange="(e) => ConfigCheckListChanged(TaskStatus.ToDo, e)"/>
+                            <label class="form-label ms-1">Do zrobienia</label>
+                        </li>
+                        <li class="m-2">
+                            <input type="checkbox" checked="@_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.InProgress) - 1).IsChecked" class="form-check-input" @onchange="(e) => ConfigCheckListChanged(TaskStatus.InProgress, e)" />
+                            <label class="form-label ms-1">W trakcie</label>
+                        </li>
+                        <li class="m-2">
+                            <input type="checkbox" checked="@_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.Complete) - 1).IsChecked" class="form-check-input" @onchange="(e) => ConfigCheckListChanged(TaskStatus.Complete, e)" />
+                            <label class="form-label ms-1">Zakończone</label>
+                        </li>
+                    </ul>
+                    @if (!_isCheckListConfigValid)
+                    {
+                        <p class="fw-light text-danger mb-0">Proszę zaznaczyć którąkolwiek z opcji, aby wygenerować check listę!</p>
+                    }
+                </Content>
+            </Modal>
+
             <div class="mt-4 btn-row">
+                <button class="btn btn-primary me-1" disabled="@(!_tasksList.Any())" @onclick="GenerateCheckList">
+                    Generuj check listę
+                </button>
+
                 <button class="btn @(_isDeleteTrybeEnabled ? "btn-danger" : "btn-secondary") btn-delete-tasks me-1" @onclick="Delete">
                     <span class="fa-regular--trash-alt me-1" />
                     <span>@(_isDeleteTrybeEnabled ? "Usuń" : "Usuwanie")</span>
@@ -45,7 +78,7 @@
 
                 <div class="canban-column p-2 rounded" data-id="@Convert.ToInt32(TaskStatus.ToDo)">
                     <p class="canban-header">
-                        <b class="me-2">Zaplanowane</b>
+                        <b class="me-2">Do zrobienia</b>
                         <span class="ri--todo-line"></span>
                     </p>
 

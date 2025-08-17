@@ -9,7 +9,7 @@ using OrganizeApp.Shared.Task.Commands;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class EditTask : IDisposable
+    public partial class EditTask : IDisposable //ToDo: addTask event onblur
     {
         private EditTaskCommand _task; 
 
