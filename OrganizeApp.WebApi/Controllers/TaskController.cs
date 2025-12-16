@@ -10,7 +10,7 @@ namespace OrganizeApp.WebApi.Controllers
 
     public class TaskController : BaseApiController
     {
-        [HttpGet("{userId}")]
+        [HttpGet("tasks/{userId}")]
         [Authorize]
         public async Task<IActionResult> GetTasks(string userId)
         {
@@ -46,6 +46,13 @@ namespace OrganizeApp.WebApi.Controllers
         public async Task<IActionResult> GetTasksCheckList(string userId)
         {
             return Ok(await Mediator.Send(new GetTasksCheckListQuery { UserId = userId }));
+        }
+
+        [HttpGet("tasks-category/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetTasksIncludingCategory(string userId)
+        {
+            return Ok(await Mediator.Send(new GetTasksInculdingCategoryQuery { UserId = userId }));
         }
 
         [HttpPost]

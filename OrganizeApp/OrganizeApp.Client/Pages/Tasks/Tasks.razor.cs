@@ -10,14 +10,13 @@ using OrganizeApp.Client.Services;
 using OrganizeApp.Shared.Common.Models;
 using OrganizeApp.Shared.Task.Commands;
 using OrganizeApp.Shared.Task.Dtos;
-using System.Security.Claims;
 using TaskStatus = OrganizeApp.Shared.Common.Enums.TaskStatus;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class Tasks : IDisposable //ToDo: zaszyfrowanie hasła do emaila, kategorie, zmniejszenie rozmiarów tasków, sortowanie tasków
+    public partial class Tasks : IDisposable //ToDo: sortowanie tasków, exception wywala login header
     {
-        private IList<TaskAllDto> _tasksList;
+        private IList<TaskIncludingCategoryDto> _tasksList;
         private ChangeStatusTaskCommand _task;
         private List<int> _deletingTasksId = new();
         private Modal _modalDeleteTasks;
@@ -78,8 +77,11 @@ namespace OrganizeApp.Client.Pages.Tasks
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             if (authState.User.Identity.IsAuthenticated is false)
+            {
                 NavigationManager.NavigateTo("/login");
-            _tasksList = await TaskHttpRepository.GetTasks(authState.GetUserId());
+                return;
+            }
+            _tasksList = await TaskHttpRepository.GetTasksIncludingCategory(authState.GetUserId());
             _isLoading = false;
             StateHasChanged();
             await _jsModule.InvokeVoidAsync("CreateDroppable");
@@ -154,7 +156,7 @@ namespace OrganizeApp.Client.Pages.Tasks
             if (_deletingTasksId.Count > 0)
                 foreach (var taskId in _deletingTasksId)
                 {
-                    await TaskHttpRepository.DeleteTask(taskId, authState.GetUserId());
+                    await TaskHttpRepository.Delete(taskId, authState.GetUserId());
                     var taskToDelete = _tasksList.SingleOrDefault(x => x.Id == taskId);
                     if (taskToDelete is not null)
                         _tasksList.Remove(taskToDelete);

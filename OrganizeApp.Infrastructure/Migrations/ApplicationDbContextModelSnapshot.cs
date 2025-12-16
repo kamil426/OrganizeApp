@@ -17,7 +17,7 @@ namespace OrganizeApp.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -226,6 +226,33 @@ namespace OrganizeApp.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("OrganizeApp.Domain.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Category", (string)null);
+                });
+
             modelBuilder.Entity("OrganizeApp.Domain.Entities.Task", b =>
                 {
                     b.Property<int>("Id")
@@ -233,6 +260,9 @@ namespace OrganizeApp.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateOfComplete")
                         .HasColumnType("datetime2");
@@ -252,14 +282,16 @@ namespace OrganizeApp.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -317,10 +349,10 @@ namespace OrganizeApp.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrganizeApp.Domain.Entities.Task", b =>
+            modelBuilder.Entity("OrganizeApp.Domain.Entities.Category", b =>
                 {
                     b.HasOne("OrganizeApp.Domain.Entities.ApplicationUser", "ApplicationUser")
-                        .WithMany("Tasks")
+                        .WithMany("Categories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -328,7 +360,31 @@ namespace OrganizeApp.Infrastructure.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("OrganizeApp.Domain.Entities.Task", b =>
+                {
+                    b.HasOne("OrganizeApp.Domain.Entities.Category", "Category")
+                        .WithMany("Tasks")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("OrganizeApp.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("Tasks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("OrganizeApp.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Tasks");
+                });
+
+            modelBuilder.Entity("OrganizeApp.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Tasks");
                 });

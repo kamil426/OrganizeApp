@@ -1,7 +1,9 @@
 ﻿@page "/task/read/{id:int}/{url}"
 @rendermode _renderMode
 
-<PageTitle>Szczegóły zadania</PageTitle>
+<HeadContent>
+    <PageTitle>Szczegóły zadania</PageTitle>
+</HeadContent>
 
 <Auth>
     <ChildContent Context="AuthContext">
@@ -43,6 +45,11 @@
                 }
 
                 <div class="my-4"><b>Status zadania:</b> @_task.TaskStatus.AsString(EnumFormat.DisplayName)</div>
+
+                @if (_task.CategoryName is not null)
+                {
+                    <div class="my-4"><b>Kategoria:</b> @_task.CategoryName</div>
+                }
             </div>
         }
     </ChildContent>

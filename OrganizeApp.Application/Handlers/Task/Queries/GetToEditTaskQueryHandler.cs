@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OrganizeApp.Application.Common.Interfaces;
+using OrganizeApp.Shared.Category.Dtos;
 using OrganizeApp.Shared.Task.Commands;
 using OrganizeApp.Shared.Task.Queries;
 using System;
@@ -24,17 +25,30 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
         {
             var task = await _context.Tasks.SingleAsync(x => x.Id == request.Id && x.UserId == request.UserId);
 
+            var categories = _context.Categories
+                .Where(x => x.UserId == request.UserId)
+                .Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Color = x.Color
+                });
+
             if (task == null)
                 return null;
 
-            return new EditTaskCommand
+            var editTaskCommand = new EditTaskCommand()
             {
                 Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
                 DateOfPlannedStart = task.DateOfPlannedStart,
                 DateOfPlannedEnd = task.DateOfPlannedEnd,
+                CategoryId = task.CategoryId,
+                Categories = categories.ToList()
             };
+
+            return editTaskCommand;
         }
     }
 }

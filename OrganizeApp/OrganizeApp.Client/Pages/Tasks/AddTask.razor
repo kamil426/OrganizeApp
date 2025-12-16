@@ -1,7 +1,9 @@
 ﻿@page "/task/add"
 @rendermode _renderMode
 
-<PageTitle>Dodawanie zadania</PageTitle>
+<HeadContent>
+    <PageTitle>Dodawanie zadania</PageTitle>
+</HeadContent>
 
 <Auth>
     <ChildContent Context="AuthContext">
@@ -58,6 +60,20 @@
                     </div>
 
                     <div class="my-3">
+                        <label class="form-label">Kategoria zadania</label>
+                        <InputSelect @bind-Value="_task.CategoryId" class="form-select">
+                            <option selected value="0">-- Brak kategorii --</option>
+                            @if (_categories.Any())
+                            {
+                                @foreach (var item in _categories)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="my-3">
                         @if (_isLoading)
                         {
                             <button class="btn btn-primary btn-lg btn-spinner" type="submit" disabled>
@@ -72,7 +88,6 @@
                     </div>
 
                 </EditForm>
-
             </div>
         }
     </ChildContent>

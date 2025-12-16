@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OrganizeApp.Application.Handlers.Task.Queries
 {
-    public class GetTasksCheckListQueryHandler : IRequestHandler<GetTasksCheckListQuery, IEnumerable<TasksCheckListDto>>
+    public class GetTasksCheckListQueryHandler : IRequestHandler<GetTasksCheckListQuery, IEnumerable<TaskCheckListDto>>
     {
         private IApplicationDbContext _context;
 
@@ -20,14 +20,14 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
             _context = context;
         }
 
-        async Task<IEnumerable<TasksCheckListDto>> IRequestHandler<GetTasksCheckListQuery, IEnumerable<TasksCheckListDto>>.Handle(GetTasksCheckListQuery request, CancellationToken cancellationToken)
+        async Task<IEnumerable<TaskCheckListDto>> IRequestHandler<GetTasksCheckListQuery, IEnumerable<TaskCheckListDto>>.Handle(GetTasksCheckListQuery request, CancellationToken cancellationToken)
         {
             var tasks = await _context
                 .Tasks
                 .Where(x => x.UserId == request.UserId)
                 .AsNoTracking()
                 .OrderBy(x => x.DateOfComplete)
-                .Select(x => new TasksCheckListDto
+                .Select(x => new TaskCheckListDto
                 {
                     Title = x.Title,
                     TaskStatus = x.TaskStatus

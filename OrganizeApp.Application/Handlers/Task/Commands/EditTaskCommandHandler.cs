@@ -30,6 +30,7 @@ namespace OrganizeApp.Application.Handlers.Task.Commands
             task.DateOfPlannedEnd = request.DateOfPlannedEnd;
             task.Description = request.Description;
             task.Title = request.Title;
+            task.CategoryId = request.CategoryId;
 
             await _context.SaveChangesAsync(cancellationToken);
         }

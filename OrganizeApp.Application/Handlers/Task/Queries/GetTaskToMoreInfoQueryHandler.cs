@@ -24,6 +24,7 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
         public async Task<TaskMoreInfoDto> Handle(GetMoreInfoTaskQuery request, CancellationToken cancellationToken)
         {
             var task = await _context.Tasks.SingleAsync(x => x.Id == request.Id && x.UserId == request.UserId);
+            var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == task.CategoryId);
 
             if (task == null)
                 return null;
@@ -36,6 +37,7 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
                 DateOfPlannedEnd = task.DateOfPlannedEnd,
                 DateOfComplete = task.DateOfComplete,
                 TaskStatus = task.TaskStatus,
+                CategoryName = category?.Name,
             };
         }
     }

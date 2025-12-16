@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganizeApp.Shared.Task.Dtos
 {
-    public class TasksCheckListDto
+    public class TaskCheckListDto
     {
         public string Title { get; set; }
         public Common.Enums.TaskStatus TaskStatus { get; set; }

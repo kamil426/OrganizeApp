@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using OrganizeApp.Shared.Category.Dtos;
 using OrganizeApp.Shared.Common.Enums;
 using OrganizeApp.Shared.DataAnnotations;
 using System;
@@ -15,7 +16,7 @@ namespace OrganizeApp.Shared.Task.Commands
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Pole 'Tytuł' jest wymagane")]
-        [MaxLength(100, ErrorMessage = "Pole 'Tytuł' może mieć maksymalnie 100 znaków")]
+        [MaxLength(40, ErrorMessage = "Pole 'Tytuł' może mieć maksymalnie 40 znaków")]
         public string Title { get; set; }
 
         [MaxLength(1250, ErrorMessage = "Pole 'Opis' może mieć maksymalnie 1250 znaków")]
@@ -25,5 +26,7 @@ namespace OrganizeApp.Shared.Task.Commands
         [DateGreaterThan("DateOfPlannedStart", ErrorMessage = "Data zakończenia musi być większa od daty rozpoczęcia")]
         public DateTime? DateOfPlannedEnd { get; set; }
         public string UserId { get; set; }
+        public int? CategoryId { get; set; }
+        public IEnumerable<CategoryDto>? Categories { get; set; }
     }
 }

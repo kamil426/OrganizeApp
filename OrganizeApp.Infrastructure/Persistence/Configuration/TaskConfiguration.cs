@@ -18,7 +18,7 @@ namespace OrganizeApp.Infrastructure.Persistence.Configuration
             builder.ToTable("Tasks");
 
             builder.Property(x => x.Title)
-                .HasMaxLength(100)
+                .HasMaxLength(40)
                 .IsRequired();
 
             builder.Property(x => x.Description)
@@ -28,6 +28,10 @@ namespace OrganizeApp.Infrastructure.Persistence.Configuration
                 .WithMany(x => x.Tasks)
                 .HasForeignKey(x => x.UserId)
                 .IsRequired();
+
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.Tasks)
+                .HasForeignKey(x => x.CategoryId);
         }
     }
 }

@@ -1,13 +1,15 @@
 ﻿@page "/task/edit/{id:int}"
 @rendermode _renderMode
 
-<PageTitle>Edycja zadania</PageTitle>
+<HeadContent>
+    <PageTitle>Edycja zadania</PageTitle>
+</HeadContent>
 
 <Auth>
     <ChildContent Context="AuthContext">
-        @if (_isDataLoading)
+        @if (_isPageLoading)
         {
-            <Loading />
+          <Loading/>
         }
         else if (_task is null)
         {
@@ -46,6 +48,27 @@
                         <label class="form-label">Data planowanego zakończenia</label>
                         <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_task.DateOfPlannedEnd" class="form-control" disabled="@_isDateOfPlannedEndDisabled" />
                         <ValidationMessage For="() => _task.DateOfPlannedEnd" />
+                    </div>
+
+                    <div class="my-3">
+                        <label class="form-label">Kategoria zadania</label>
+                        <InputSelect @bind-Value="_task.CategoryId" class="form-select">
+                            @if(_task.CategoryId is null)
+                            {
+                                <option selected value="0">-- Brak kategorii --</option>
+                            }
+                            else
+                            {
+                                <option value="0">-- Brak kategorii --</option>
+                            }
+                            @if (_task.Categories.Any())
+                            {
+                                @foreach (var item in _task.Categories)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </InputSelect>
                     </div>
 
                     <div class="my-3">

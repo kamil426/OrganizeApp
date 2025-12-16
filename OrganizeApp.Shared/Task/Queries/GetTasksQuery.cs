@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OrganizeApp.Shared.Task.Queries
 {
-    public class GetTasksQuery : IRequest<IEnumerable<TaskAllDto>>
+    public class GetTasksQuery : IRequest<IEnumerable<TaskDto>>
     {
         public string UserId { get; set; }
     }

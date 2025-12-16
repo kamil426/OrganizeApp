@@ -9,12 +9,12 @@ using OrganizeApp.Shared.Task.Commands;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class EditTask : IDisposable //ToDo: addTask event onblur
+    public partial class EditTask : IDisposable //ToDo: event onblur
     {
         private EditTaskCommand _task; 
 
         private bool _isLoading = false;
-        private bool _isDataLoading = true;
+        private bool _isPageLoading = true;
         private bool _isDateOfPlannedEndDisabled = true;
         private static IComponentRenderMode _renderMode = new InteractiveAutoRenderMode(prerender: false);
 
@@ -49,8 +49,8 @@ namespace OrganizeApp.Client.Pages.Tasks
             {
                 await RefreshLoginStatusService.RefreshLoginHeader();
                 var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-                _task = await TaskHttpRepository.GetEditTask(Id, authState.GetUserId());
-                _isDataLoading = false;
+                _task = await TaskHttpRepository.GetToEditTask(Id, authState.GetUserId());
+                _isPageLoading = false;
                 if (_task.DateOfPlannedStart.HasValue)
                     _isDateOfPlannedEndDisabled = false;
                 StateHasChanged();
@@ -65,6 +65,8 @@ namespace OrganizeApp.Client.Pages.Tasks
             {
                 _isLoading = true;
                 _task.UserId = authState.GetUserId();
+                if (_task.CategoryId == 0)
+                    _task.CategoryId = null;
                 await TaskHttpRepository.Edit(_task);
                 NavigationManager.NavigateTo("/tasks");
             }

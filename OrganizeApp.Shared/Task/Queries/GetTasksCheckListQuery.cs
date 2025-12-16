@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OrganizeApp.Shared.Task.Queries
 {
-    public class GetTasksCheckListQuery : IRequest<IEnumerable<TasksCheckListDto>>
+    public class GetTasksCheckListQuery : IRequest<IEnumerable<TaskCheckListDto>>
     {
         public string UserId { get; set; }
     }

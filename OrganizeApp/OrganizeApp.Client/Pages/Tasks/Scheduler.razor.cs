@@ -17,8 +17,8 @@ namespace OrganizeApp.Client.Pages.Tasks
 {
     public partial class Scheduler : IDisposable
     {
-        private RadzenScheduler<TaskAllDto> _scheduler;
-        private IList<TaskAllDto> _tasks;
+        private RadzenScheduler<TaskDto> _scheduler;
+        private IList<TaskDto> _tasks;
         private bool _isLoading = true;
         private DateTime _date;
         private IJSObjectReference _jsModule;
@@ -26,7 +26,7 @@ namespace OrganizeApp.Client.Pages.Tasks
         private static IComponentRenderMode _renderMode = new InteractiveAutoRenderMode(prerender: false);
 
         [Parameter]
-        public string? Data { get; set; }
+        public string? Date { get; set; }
 
         [Parameter]
         public string? View { get; set; }
@@ -58,7 +58,7 @@ namespace OrganizeApp.Client.Pages.Tasks
 
         protected override async Task OnParametersSetAsync()
         {
-            _date = Data is not null ? DateTime.Parse(Data) : DateTime.Now;
+            _date = Date is not null ? DateTime.Parse(Date) : DateTime.Now;
 
             if(View is not null)
             {
@@ -101,12 +101,12 @@ namespace OrganizeApp.Client.Pages.Tasks
             StateHasChanged();
         }
 
-        private void OpenDescription(SchedulerAppointmentSelectEventArgs<TaskAllDto> e)
+        private void OpenDescription(SchedulerAppointmentSelectEventArgs<TaskDto> e)
         {
             NavigationManager.NavigateTo($"/task/read/{e.Data.Id}/task*scheduler*{_scheduler.CurrentDate}*{_scheduler.SelectedView.Text}");
         }
 
-        private void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<TaskAllDto> e)
+        private void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<TaskDto> e)
         {
             if (e.Data.TaskStatus == OrganizeApp.Shared.Common.Enums.TaskStatus.Complete)
             {

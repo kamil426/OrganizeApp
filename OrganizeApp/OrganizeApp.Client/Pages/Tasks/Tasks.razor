@@ -3,7 +3,9 @@
 @rendermode _renderMode
 @page "/tasks"
 
-<PageTitle>Moje zadania</PageTitle>
+<HeadContent>
+    <PageTitle>Moje zadania</PageTitle>
+</HeadContent>
 
 <Auth>
     <ChildContent Context="AuthContext">
@@ -20,6 +22,7 @@
         {
             <h2>Moje zadania</h2>
 
+            @* Modal delete tasks *@
             <Modal @ref="_modalDeleteTasks" Title="Usuwanie zadań"
                    IconStyleId="Modal.IconStyle.Warning"
                    HeaderColor="#4340D2"
@@ -32,6 +35,7 @@
                 </Content>
             </Modal>
 
+            @* Modal checkList configuration *@
             <Modal @ref="_modalCheckListConfiguration" Title="Konfiguracja check listy"
                    IconStyleId="Modal.IconStyle.None"
                    HeaderColor="#4340D2"
@@ -42,7 +46,7 @@
                     <h5>Wybierz kategorię zadań, które chcesz aby się znalazły na liście</h5>
                     <ul class="checklist-option mt-4">
                         <li class="m-2">
-                            <input type="checkbox" checked="@_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.ToDo) - 1).IsChecked" class="form-check-input" @onchange="(e) => ConfigCheckListChanged(TaskStatus.ToDo, e)"/>
+                            <input type="checkbox" checked="@_checkListConfiguration.ElementAt(Convert.ToInt32(TaskStatus.ToDo) - 1).IsChecked" class="form-check-input" @onchange="(e) => ConfigCheckListChanged(TaskStatus.ToDo, e)" />
                             <label class="form-label ms-1">Do zrobienia</label>
                         </li>
                         <li class="m-2">
@@ -61,148 +65,112 @@
                 </Content>
             </Modal>
 
-            <div class="mt-4 btn-row">
-                <button class="btn btn-primary me-1" disabled="@(!_tasksList.Any())" @onclick="GenerateCheckList">
-                    Generuj check listę
-                </button>
+            @* Buttons *@
+            @if (_tasksList.Any())
+            {
+                <div class="mt-3 btn-row">
+                    <button class="btn btn-primary me-1" disabled="@(!_tasksList.Any())" @onclick="GenerateCheckList">
+                        Generuj check listę
+                    </button>
 
-                <button class="btn @(_isDeleteTrybeEnabled ? "btn-danger" : "btn-secondary") btn-delete-tasks me-1" @onclick="Delete">
-                    <span class="fa-regular--trash-alt me-1" />
-                    <span>@(_isDeleteTrybeEnabled ? "Usuń" : "Usuwanie")</span>
-                </button>
+                    <button class="btn @(_isDeleteTrybeEnabled ? "btn-danger" : "btn-secondary") btn-delete-tasks me-1" @onclick="Delete">
+                        <span class="fa-regular--trash-alt me-1" />
+                        <span>@(_isDeleteTrybeEnabled ? "Usuń" : "Usuwanie")</span>
+                    </button>
 
-                <button id="1" class="btn btn-secondary @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onclick="CancelDeleteTrybe">Anuluj</button>
-            </div>
+                    <button class="btn btn-secondary @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onclick="CancelDeleteTrybe">Anuluj</button>
+                </div>
+            }
 
-            <div class="canban-table mt-3">
+            @* Canban table *@
+            <div class="canban-table mt-4">
 
-                <div class="canban-column p-2 rounded" data-id="@Convert.ToInt32(TaskStatus.ToDo)">
-                    <p class="canban-header">
-                        <b class="me-2">Do zrobienia</b>
-                        <span class="ri--todo-line"></span>
-                    </p>
-
-                    @if (_tasksList.Any() && (_tasksList.FirstOrDefault(x => x.TaskStatus == TaskStatus.ToDo) is not null))
+                @foreach (var item in Enum.GetValues<OrganizeApp.Shared.Common.Enums.TaskStatus>())
+                {
+                    if (Convert.ToInt32(item) != 0)
                     {
-                        @foreach (var task in _tasksList)
-                        {
-                            @if (task.TaskStatus == TaskStatus.ToDo)
+                        @* Column header *@
+                        <div class="canban-column ms-1 me-1 p-2 rounded" data-id="@Convert.ToInt32(item)">
+
+                            @* Canban header *@
+                            <p class="canban-header">
+                                <b class="me-2">@item.AsString(EnumFormat.DisplayName)</b>
+                                <span class="ri--todo-line"></span>
+                            </p>
+
+                            @if (_tasksList.Any() && (_tasksList.FirstOrDefault(x => x.TaskStatus == item) is not null))
                             {
-                                <div @onmouseenter="() => OnMouseEnter(task.Id)" class="border-1 rounded my-4 p-2 @(_isDeleteTrybeEnabled ? "draggable-task-disabled" : "draggable-task")" data-id="@task.Id">
-
-                                    <div class="task-header">
-                                        <h6 class="text-start col-11">
-                                            @task.Title
-                                        </h6>
-                                        <span class="nimbus--edit col-1 @(_isDeleteTrybeEnabled ? "hide-element" : "")" @onclick="() => EditTask(task.Id)"></span>
-                                        <input type="checkbox" class="task-checkbox form-check-input border-black @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onchange="(e) => AddTaskToListDeletingItems(task.Id, e)" />
-                                    </div>
-
-                                    <div class="task-footer mt-2">
-                                        <span>
-                                            <a class="task-link @(_isDeleteTrybeEnabled ? "disabled-link" : "")" @onclick="() => OpenDescription(task.Id)">Czytaj opis...</a>
-                                        </span>
-                                        @if (task.DateOfPlannedStart is not null)
+                                <div class="draggable-tasks">
+                                    @foreach (var task in _tasksList)
+                                    {
+                                        @if (task.TaskStatus == item)
                                         {
-                                            <span>Rozpoczęcie: @task.DateOfPlannedStart.Value.ToString("dd-MM-yyyy HH:mm")</span>
+                                            @* Task drag and drop *@
+                                            <div @onmouseenter="() => OnMouseEnter(task.Id)" class="border-1 rounded my-1 p-2 font-small @(_isDeleteTrybeEnabled ? "draggable-task-disabled" : "draggable-task")" data-id="@task.Id">
+
+                                                @* Task Header *@
+                                                <div class="task-header">
+                                                    <h6 class="text-start col-11">
+                                                        @task.Title
+                                                    </h6>
+                                                    <span class="nimbus--edit col-1 @(_isDeleteTrybeEnabled ? "hide-element" : "")" @onclick="() => EditTask(task.Id)"></span>
+                                                    <input type="checkbox" class="delete-checkbox form-check-input border-black @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onchange="(e) => AddTaskToListDeletingItems(task.Id, e)" />
+                                                </div>
+
+                                                @* Task Footer *@
+                                                <div class="task-footer mt-1">
+
+                                                    @* Link Open description *@
+                                                    <div>
+                                                        <a class="task-footer__link @(_isDeleteTrybeEnabled ? "disabled-link" : "")" @onclick="() => OpenDescription(task.Id)">Czytaj opis...</a>
+                                                    </div>
+
+                                                    @* Date *@
+                                                    @switch (Convert.ToInt32(item))
+                                                    {
+                                                        case 1:
+                                                            @if (task.DateOfPlannedStart is not null)
+                                                            {
+                                                                <div>Rozpoczęcie: @task.DateOfPlannedStart.Value.ToString("dd-MM-yyyy HH:mm")</div>
+                                                            }
+                                                            break;
+                                                        case 2:
+                                                            @if (task.DateOfPlannedEnd is not null)
+                                                            {
+                                                                <div>Zakończenie: @task.DateOfPlannedEnd.Value.ToString("dd-MM-yyyy HH:mm")</div>
+                                                            }
+                                                            break;
+                                                        case 3:
+                                                            @if (task.DateOfComplete is not null)
+                                                            {
+                                                                <div>Zakończono: @task.DateOfComplete.Value.ToString("dd-MM-yyyy HH:mm")</div>
+                                                            }
+                                                            break;
+                                                    }
+                                                </div>
+
+                                                @* Category *@
+                                                @if (task.CategoryId is not null)
+                                                {
+                                                    <div class="draggable-task__category mt-1" style="background-color: @task.CategoryDto.Color;">
+                                                        <span class="draggable-task__category-text text-center" style="color: @task.CategoryDto.Color;">
+                                                            @task.CategoryDto.Name
+                                                        </span>
+                                                    </div>
+                                                }
+                                            </div>
                                         }
-                                    </div>
+                                    }
+
                                 </div>
                             }
-                        }
-                    }
-                    else
-                    {
-                        <div class="text-center my-4 fw-bold">Brak zadań!</div>
-                    }
-                </div>
-
-                <div class="ms-4 me-4 canban-column p-2 rounded" data-id="@Convert.ToInt32(TaskStatus.InProgress)">
-                    <p class="canban-header">
-                        <b class="me-2">W trakcie</b>
-                        <span class="bxs--hourglass"></span>
-                    </p>
-
-                    @if (_tasksList.Any() && (_tasksList.FirstOrDefault(x => x.TaskStatus == TaskStatus.InProgress) is not null))
-                    {
-                        @foreach (var task in _tasksList)
-                        {
-                            if (task.TaskStatus == TaskStatus.InProgress)
+                            else
                             {
-                                <div @onmouseenter="() => OnMouseEnter(task.Id)" class="border-1 rounded my-4 p-2 @(_isDeleteTrybeEnabled ? "draggable-task-disabled" : "draggable-task")" data-id="@task.Id">
-
-                                    <div class="task-header">
-                                        <h6 class="text-start col-11">
-                                            @task.Title
-                                        </h6>
-                                        <span class="nimbus--edit col-1 @(_isDeleteTrybeEnabled ? "hide-element" : "")" @onclick="() => EditTask(task.Id)"></span>
-                                        <input type="checkbox" class="task-checkbox form-check-input border-black @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onchange="(e) => AddTaskToListDeletingItems(task.Id, e)" />
-                                    </div>
-
-                                    <div class="task-footer mt-2">
-                                        <span>
-                                            <a class="task-link @(_isDeleteTrybeEnabled ? "disabled-link" : "")" @onclick="() => OpenDescription(task.Id)">Czytaj opis...</a>
-                                        </span>
-                                        @if (task.DateOfPlannedEnd is not null)
-                                        {
-                                            <span>Zakończenie: @task.DateOfPlannedEnd.Value.ToString("dd-MM-yyyy HH:mm")</span>
-                                        }
-                                    </div>
-                                </div>
+                                <div class="text-center my-4 fw-bold">Brak zadań!</div>
                             }
-                        }
+                        </div>
                     }
-                    else
-                    {
-                        <div class="text-center my-4 fw-bold">Brak zadań!</div>
-                    }
-                </div>
-
-                <div class="canban-column p-2 rounded" data-id="@Convert.ToInt32(TaskStatus.Complete)">
-                    <p class="canban-header">
-                        <b class="me-2">Zakończone</b>
-                        <span class="fluent-mdl2--completed"></span>
-                    </p>
-
-                    @if (_tasksList.Any() && (_tasksList.FirstOrDefault(x => x.TaskStatus == TaskStatus.Complete) is not null))
-                    {
-
-                        @foreach (var task in _tasksList)
-                        {
-                            if (task.TaskStatus == TaskStatus.Complete)
-                            {
-                                <div @onmouseenter="() => OnMouseEnter(task.Id)" class="border-1 rounded my-4 p-2 @(_isDeleteTrybeEnabled ? "draggable-task-disabled" : "draggable-task")" data-id="@task.Id">
-
-                                    <div class="task-header">
-                                        <h6 class="text-start col-11">
-                                            @task.Title
-                                        </h6>
-                                        <span class="nimbus--edit col-1 @(_isDeleteTrybeEnabled ? "hide-element" : "")" @onclick="() => EditTask(task.Id)"></span>
-                                        <input type="checkbox" class="task-checkbox form-check-input border-black @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onchange="(e) => AddTaskToListDeletingItems(task.Id, e)" />
-                                    </div>
-
-                                    <div class="text-end mt-2">
-
-                                        <div class="task-footer mt-2">
-                                            <span>
-                                                <a class="task-link @(_isDeleteTrybeEnabled ? "disabled-link" : "")" @onclick="() => OpenDescription(task.Id)">Czytaj opis...</a>
-                                            </span>
-                                            @if (task.DateOfComplete is not null)
-                                            {
-                                                <span>Zakończono: @task.DateOfComplete.Value.ToString("dd-MM-yyyy HH:mm")</span>
-
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    }
-                    else
-                    {
-                        <div class="text-center my-4 fw-bold">Brak zadań!</div>
-                    }
-                </div>
+                }
             </div>
         }
     </ChildContent>

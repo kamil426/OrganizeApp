@@ -29,6 +29,7 @@ namespace OrganizeApp.Application.Handlers.Task.Commands
                 DateOfPlannedEnd = request.DateOfPlannedEnd,
                 TaskStatus = request.TaskStatus,
                 UserId = request.UserId,
+                CategoryId = request.CategoryId,
             };
 
             _context.Tasks.Add(task);

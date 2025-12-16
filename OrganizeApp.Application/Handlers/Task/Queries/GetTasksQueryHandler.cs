@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OrganizeApp.Application.Handlers.Task.Queries
 {
-    public class GetTasksQueryHandler : IRequestHandler<GetTasksQuery, IEnumerable<TaskAllDto>>
+    public class GetTasksQueryHandler : IRequestHandler<GetTasksQuery, IEnumerable<TaskDto>>
     {
         private IApplicationDbContext _context;
 
@@ -20,14 +20,14 @@ namespace OrganizeApp.Application.Handlers.Task.Queries
             _context = context;
         }
 
-        async Task<IEnumerable<TaskAllDto>> IRequestHandler<GetTasksQuery, IEnumerable<TaskAllDto>>.Handle(GetTasksQuery request, CancellationToken cancellationToken)
+        async Task<IEnumerable<TaskDto>> IRequestHandler<GetTasksQuery, IEnumerable<TaskDto>>.Handle(GetTasksQuery request, CancellationToken cancellationToken)
         {
             var tasks = await _context
                 .Tasks
                 .Where(x => x.UserId == request.UserId)
                 .AsNoTracking()
                 .OrderBy(x => x.DateOfComplete)
-                .Select(x => new TaskAllDto
+                .Select(x => new TaskDto
                 {
                     Id = x.Id,
                     Title = x.Title,

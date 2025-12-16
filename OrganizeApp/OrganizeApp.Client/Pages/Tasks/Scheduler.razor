@@ -1,7 +1,9 @@
-﻿@page "/task/scheduler/{data?}/{view?}"
+﻿@page "/task/scheduler/{date?}/{view?}"
 @rendermode _renderMode
 
-<PageTitle>Kalendarz</PageTitle>
+<HeadContent>
+    <PageTitle>Kalendarz</PageTitle>
+</HeadContent>
 
 <h2>Kalendarz</h2>
 
@@ -17,7 +19,7 @@
                              class="my-4"
                              style="height: 48.1em;"
                              @ref=_scheduler
-                             TItem="TaskAllDto"
+                             TItem="TaskDto"
                              Data=@_tasks
                              StartProperty="DateOfPlannedStart"
                              EndProperty="DateOfPlannedEnd"

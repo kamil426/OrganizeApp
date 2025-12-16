@@ -15,6 +15,8 @@ namespace OrganizeApp.Domain.Entities
         public DateTime? DateOfPlannedEnd { get; set; }
         public DateTime? DateOfComplete { get; set; }
         public Shared.Common.Enums.TaskStatus TaskStatus { get; set; }
+        public int? CategoryId { get; set; }
+        public Category? Category { get; set; }
         public string UserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }

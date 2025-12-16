@@ -18,22 +18,25 @@ namespace OrganizeApp.Client.HttpRepository
         public async Task ChangeStatus(ChangeStatusTaskCommand command)
             => await _client.PutAsJsonAsync("task/status", command);
 
-        public async Task DeleteTask(int id, string userId)
+        public async Task Delete(int id, string userId)
             => await _client.DeleteAsync($"task/{id}/{userId}");
 
         public async Task Edit(EditTaskCommand command)
             => await _client.PutAsJsonAsync("task/task", command);
 
-        public async Task<EditTaskCommand> GetEditTask(int id, string userId)
+        public async Task<EditTaskCommand> GetToEditTask(int id, string userId)
             => await _client.GetFromJsonAsync<EditTaskCommand>($"task/task-edit/{id}/{userId}");
 
         public async Task<TaskMoreInfoDto> GetMoreInfo(int id, string userId)
             => await _client.GetFromJsonAsync<TaskMoreInfoDto>($"task/task-info/{id}/{userId}");
 
-        public async Task<IList<TaskAllDto>> GetTasks(string userId)
-            => await _client.GetFromJsonAsync<IList<TaskAllDto>>($"task/{userId}");
+        public async Task<IList<TaskDto>> GetTasks(string userId)
+            => await _client.GetFromJsonAsync<IList<TaskDto>>($"task/tasks/{userId}");
 
-        public async Task<IList<TasksCheckListDto>> GetTasksCheckList(string userId)
-            => await _client.GetFromJsonAsync<IList<TasksCheckListDto>>($"task/check-list/{userId}");
+        public async Task<IList<TaskCheckListDto>> GetTasksCheckList(string userId)
+            => await _client.GetFromJsonAsync<IList<TaskCheckListDto>>($"task/check-list/{userId}");
+
+        public async Task<IList<TaskIncludingCategoryDto>> GetTasksIncludingCategory(string userId)
+            => await _client.GetFromJsonAsync<IList<TaskIncludingCategoryDto>>($"task/tasks-category/{userId}");
     }
 }

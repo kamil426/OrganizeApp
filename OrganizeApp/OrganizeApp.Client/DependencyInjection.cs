@@ -27,6 +27,7 @@ namespace OrganizeApp.Client
 
             services.AddScoped(sp => sp.GetService<IHttpClientFactory>().CreateClient("OrganizeAppAPI"));
             services.AddScoped<ITaskHttpRepository ,TaskHttpRepository>();
+            services.AddScoped<ICategoryHttpRepository, CategoryHttpRepository>();
             services.AddRadzenComponents();
 
             services.AddBlazoredLocalStorage();

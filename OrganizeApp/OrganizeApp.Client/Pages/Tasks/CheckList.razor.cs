@@ -14,10 +14,10 @@ namespace OrganizeApp.Client.Pages.Tasks
     public partial class CheckList
     {
         private static IComponentRenderMode _renderMode = new InteractiveAutoRenderMode(prerender: false);
-        private IList<TasksCheckListDto> _tasksList;
-        private IList<TasksCheckListDto> _tasksListToDo;
-        private IList<TasksCheckListDto> _tasksListInProgress;
-        private IList<TasksCheckListDto> _tasksListComplete;
+        private IList<TaskCheckListDto> _tasksList;
+        private IList<TaskCheckListDto> _tasksListToDo;
+        private IList<TaskCheckListDto> _tasksListInProgress;
+        private IList<TaskCheckListDto> _tasksListComplete;
         private bool _isLoading = true;
         private IJSObjectReference _jsModule;
 

@@ -18,6 +18,7 @@ namespace OrganizeApp.Infrastructure.Persistence
         }
 
         public DbSet<Domain.Entities.Task> Tasks { get; set; }
+        public DbSet<Domain.Entities.Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
