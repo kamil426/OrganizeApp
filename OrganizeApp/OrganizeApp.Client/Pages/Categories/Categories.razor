@@ -70,7 +70,7 @@
                                         <input type="checkbox" class="delete-checkbox form-check-input border-black @(_isDeleteTrybeEnabled ? "" : "hide-element")" @onchange="(e) => AddCategoriesToListDeletingItems(category.Id, e)" />
                                     </td>
                                     <td class="align-middle">@category.Name</td>
-                                    <td class="align-middle text-center inset-shadow" style="background-color:@category.Color;"></td>
+                                    <td class="align-middle text-center inset-shadow" style="background-color:@category.Color"></td>
                                     <td class="d-flex justify-content-center">
                                         <button class="btn btn-info" @onclick="() => EditCategory(category.Id)">Edytuj</button>
                                     </td>

@@ -9,7 +9,7 @@ using OrganizeApp.Shared.Task.Commands;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class EditTask : IDisposable //ToDo: event onblur
+    public partial class EditTask : IDisposable
     {
         private EditTaskCommand _task; 
 
@@ -79,12 +79,15 @@ namespace OrganizeApp.Client.Pages.Tasks
         private void DateOfPlannedStartSelect()
         {
             if (_task.DateOfPlannedStart.HasValue)
+            {
                 _isDateOfPlannedEndDisabled = false;
+            }
             else
             {
                 _isDateOfPlannedEndDisabled = true;
                 _task.DateOfPlannedEnd = null;
             }
+            StateHasChanged();
         }
 
         private void ReturnToMyTasks()

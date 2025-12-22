@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace OrganizeApp.Client.Pages.Tasks
 {
-    public partial class AddTask : IDisposable //ToDo: event onblur
+    public partial class AddTask : IDisposable
     {
         private AddTaskCommand _task = new AddTaskCommand();
 

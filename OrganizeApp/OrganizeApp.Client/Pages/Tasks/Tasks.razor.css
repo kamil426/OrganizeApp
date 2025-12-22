@@ -27,7 +27,7 @@
 }
 
 .canban-column {
-    background-color: #ececec;
+    background-color: #dfdfdf;
     width: 33.3333%;
     display: inline-block;
 }
@@ -126,15 +126,15 @@
     padding: 0;
 }
 
-.draggable-task__category{
+.task-category {
     border-radius: 1rem;
     display: flex;
     justify-content: center;
-}
-
-.draggable-task__category-text {
-    filter: invert(1);
     font-weight: 500;
     overflow-wrap: anywhere;
     padding: 0 0.2rem;
+}
+
+.task-category__text {
+    color: rgb(0, 0, 0);
 }

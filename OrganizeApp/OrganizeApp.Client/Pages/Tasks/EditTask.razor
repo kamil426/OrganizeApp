@@ -41,12 +41,12 @@
 
                     <div class="my-3">
                         <label class="form-label">Data rozpoczęcia</label>
-                        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_task.DateOfPlannedStart" class="form-control" @onblur="DateOfPlannedStartSelect" />
+                        <RadzenDatePicker @bind-Value="_task.DateOfPlannedStart" ShowTimeOkButton="false" ShowTime="true" DateFormat="dd/MM/yyyy HH:mm" InitialViewDate="DateTime.Now" Change="DateOfPlannedStartSelect" Placeholder="dd.mm.rrrr --:--" class="form-control p-0 border-0" />
                     </div>
 
                     <div class="my-3">
                         <label class="form-label">Data planowanego zakończenia</label>
-                        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_task.DateOfPlannedEnd" class="form-control" disabled="@_isDateOfPlannedEndDisabled" />
+                        <RadzenDatePicker @bind-Value="_task.DateOfPlannedEnd" disabled="@_isDateOfPlannedEndDisabled" ShowTimeOkButton="false" ShowTime="true" DateFormat="dd/MM/yyyy HH:mm" InitialViewDate="DateTime.Now" Placeholder="dd.mm.rrrr --:--" class="form-control p-0 border-0" />
                         <ValidationMessage For="() => _task.DateOfPlannedEnd" />
                     </div>
 

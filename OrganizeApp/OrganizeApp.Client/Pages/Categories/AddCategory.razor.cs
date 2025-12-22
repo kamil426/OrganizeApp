@@ -36,7 +36,7 @@ namespace OrganizeApp.Client.Pages.Categories
             {
                 await RefreshLoginStatusService.RefreshLoginHeader("/category/add");
                 _isPageLoading = false;
-                _category.Color = "rgb(255, 255, 255)";
+                _category.Color = "rgba(255, 255, 255, 0.6)";
                 StateHasChanged();
             }
             await base.OnAfterRenderAsync(firstRender);
@@ -68,6 +68,7 @@ namespace OrganizeApp.Client.Pages.Categories
         {
             Interceptor.DisposeEvent();
         }
+
         private void Return(MouseEventArgs args)
         {
             NavigationManager.NavigateTo("/categories");
